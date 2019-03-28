@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>我的音乐</title>
+		<link rel="stylesheet" type="text/css" href="css/font/iconfont.css"/>
+		<link rel="stylesheet" type="text/css" href="css/main.css"/>
+	</head>
+	<body>
+
+		<div class="music">
+			<div class="title">
+				<span>我的音乐</span>
+				<p>
+					<input type="text" placeholder="请输入要搜索的歌曲..." id="searchInput" value="无风不起浪网--敲回车试试看！">
+					<a href="javascript:void(0)" title="搜索" id="search" class="iconfont ic">&#xe606;</a>
+				</p>
+				<a href="javascript:void(0)" title="关闭" class="iconfont close">&#xe652;</a>
+			</div>
+
+			<div class="music-container">
+
+				<!--歌曲列表-->
+				<div class="ms-lists">
+					<div class="song-title">
+						默认列表[<span id="countNum">5</span>]
+					</div>
+					<ul class="s-lists" id="s-lists">
+
+					</ul>
+				</div>
+
+				<!--歌词展示-->
+				<div class="ms-lyrics">
+
+					<!--搜索列表-->
+					<div class="searchLists" id="searchLists">
+						<div class="song-title">
+							<ul>
+								<li><a href="javascript:;">歌手</a></li>
+								<li><a href="javascript:;">歌曲名</a></li>
+								<li><a href="javascript:;">专辑</a></li>
+								<li><a href="javascript:;">时间</a></li>
+								<li><a href="javascript:;">品质</a></li>
+							</ul>
+							<a href="javascript:void(0)" class="packupLists" id="packupLists" title="关闭搜索列表">✖</a>
+						</div>
+						<div class="sl-details">
+							<ul id="sl-details"></ul>
+							<div id="pagesbox"></div>
+						</div>
+					</div>
+
+					<!--歌词显示-->
+					<div class="lrcCon" id="lrcCon"></div>
+
+					<!--音频跳动-->
+					<canvas id="canvasVoice" class="canvas" width="600" height="300"></canvas>
+
+				</div>
+			</div>
+
+			<div class="control-bar">
+				<!--播放控制-->
+				<div class="ctro-play">
+					<div class="prev-song">
+						<a href="javascript:void(0);" title="上一曲" class="pn-btn prev" id="prev"></a>
+					</div>
+					<div class="playBtn">
+						<a href="javascript:void(0);" class="" id="play"></a>
+					</div>
+					<div class="next-song">
+						<a href="javascript:void(0);" title="下一曲" class="pn-btn next" id="next"></a>
+					</div>
+				</div>
+
+				<!--音量控制-->
+				<div class="ctro-volume">
+					<a href="javascript:void(0)" class="icon-vol" id="volume-mute"></a>
+					<div class="volume-bar" id="vol-process">
+						<span class="dragBar" id="vol-bar"></span>
+						<a href="javascript:void(0)" class="circle-bar" id="vol-btn"></a>
+					</div>
+				</div>
+
+				<!--进度控制-->
+				<div class="ctro-progress">
+					<div class="timer">
+						<span id="totalTime">00:00</span>/<span id="wp_playTime">00:00</span></div>
+					<div class="progress-bar" id="wp_process">
+						<span class="dragBar" id="wp_processBar"></span>
+						<a href="javascript:void(0)" class="circle-bar" id="wp_processBtn"></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--http://m6.file.xiami.com/177/2177/2100391242/1776422243_1474688173785.mp3?auth_key=315bfe388b018292df7f784c65df1e0d-1477018800-0-null-->
+		<audio id="audio" src="music/1.mp3" ossOrigin="anonymous"></audio>
+		<style type="text/css">
+			#ul1 {width:200px; background:#CCC; border:1px solid black; position:absolute; display:none;font-size: 20px;text-align: center;}
+			#ul1 h2{font-size: 25px;border-bottom:1px solid #000;}
+			#ul1 li{list-style: none;font-size: 25px}
+			#ul1 li:hover{color:red;background-color:#fff;border-bottom:1px solid #000;}
+		</style>
+		<ul id="ul1">
+			<h2>简单的小彩蛋</h2>
+			<li><a href="http://wufengbuqilangwang.top/" target="_blank">无浪网首页</a></li>
+			<li><a href="https://wulangwang.xyz/" target="_blank">张成的博客</a></li>
+			<li><a href="">来玩耍噻</a></li>
+			<li><a href="http://wufengbuqilangwang.top/Book/index.html" target="_blank">来留下你的足迹</a></li>
+			<li><a href=""> >_<>_<>_<>_< </a></li>
+		</ul>
+		<!--
+			//	arttemplate 模板的使用方法
+			<script type="text/javascript" src="../../js/jquery-1.11.1.min.js" ></script>
+			<script src="js/arttemplate.js"></script>
+			<script type="text/html" id="text">
+				<%for (var i=0;i<data.length;i++) {%>
+			        <li>
+						<a href="javascript:;" data-url="<%=data[i].url_list[1].url%>"><%=data[i].song_name%></a>
+						<a href="javascript:;"><%=data[i].singer_name%></a>
+						<a href="javascript:;"><%=data[i].album_name%></a>
+						<a href="javascript:;"><%=data[i].url_list[1].duration%></a>
+						<a href="javascript:;"><%=data[i].url_list[1].typeDescription%></a>
+					</li>
+			    <%}%>
+			</script>
+		-->
+
+		<script type="text/javascript" src="js/data.js"></script>
+		<script type="text/javascript" src="laypage/laypage.js"></script>
+		<script type="text/javascript" src="js/jsonp.js"></script>
+		<script type="text/javascript" src="js/music.js"></script>
+		<script>
+			window.onload = function(){
+				myMusic();
+
+				document.oncontextmenu=function (ev){
+					var oEvent=ev||event;
+					var oUl=document.getElementById('ul1');
+
+					oUl.style.display='block';
+					/*位置鼠标*/
+					oUl.style.left=oEvent.clientX+'px';
+					oUl.style.top=oEvent.clientY+'px';
+
+					return false;
+				};
+				/*其他地方点击消失*/
+				document.onclick=function (){
+					var oUl=document.getElementById('ul1');
+
+					oUl.style.display='none';
+				};
+
+				var oBtn=document.getElementById('search');
+				var oBtn1=document.getElementById('searchInput');
+
+
+				document.onkeydown=function (ev){
+					var oEvent=ev||event;
+
+					if(oEvent.ctrlKey && oEvent.keyCode==13 ||oEvent.keyCode==13){
+					 	window.location='https:\/\/www.baidu.com/s?wd=无浪网&rsv_spt=1&rsv_iqid=0xceac2f0b0003a177&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=1&rsv_sug3=1';
+					}
+				}
+
+			};
+		</script>
+
+
+
+	</body>
+</html>
